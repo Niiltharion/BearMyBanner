@@ -43,7 +43,7 @@ namespace BearMyBanner
             }
         }
 
-        protected override void OnHit(Agent affectorAgent, int damage, in MissionWeapon affectorWeapon, float perkEffectOnMorale)
+        protected override void OnHit(Agent affectorAgent, int damage, in MissionWeapon affectorWeapon)
         {
             try
             {
