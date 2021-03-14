@@ -146,8 +146,10 @@ namespace BearMyBanner
 
         public bool AgentGetsFancyBanner(IBMBAgent agent)
         {
-            if (!_settings.EnableFormationBanners || !agent.IsInPlayerParty) return false;
+            if (!_settings.EnableFormationBanners) return false;
             if (agent.Character.IsPlayerCharacter) return false;
+            if (_equippedBannersByParty.TryGetValue(agent.PartyName, out var equippedCount) && equippedCount % 2 != 0)
+                return false;
             if (_settings.AllowCompanions && _settings.CompanionsUseFormationBanners && agent.Character.Occupation == CharacterOccupation.Wanderer) return true;
             if (agent.Character.IsHero) return false;
             return true;
@@ -161,7 +163,7 @@ namespace BearMyBanner
         /// <summary>
         /// Shows a message with each party banner count in the parties color
         /// </summary>
-        /// <param name="team"></param>
+        /// <param name="partiesInTeam"></param>
         public void PrintBannersEquippedByPartiesInTeam(Dictionary<string, uint> partiesInTeam)
         {
             foreach (KeyValuePair<string, uint> entry in partiesInTeam)

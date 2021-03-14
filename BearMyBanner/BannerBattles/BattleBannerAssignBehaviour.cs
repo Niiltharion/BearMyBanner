@@ -21,6 +21,7 @@ namespace BearMyBanner
         private readonly IBMBFormationBanners _formationBannerSettings;
 
         private List<Agent> _spawnedAgents = new List<Agent>();
+        private Dictionary<int, Banner> _coloredFormationBanners;
         private bool _initialUnitsSpawned = false;
         private bool _unprocessedUnits = false;
 
@@ -51,6 +52,8 @@ namespace BearMyBanner
                 { FormationGroup.LightCavalry, new Banner(_formationBannerSettings.LightCavalry) },
                 { FormationGroup.HeavyCavalry, new Banner(_formationBannerSettings.HeavyCavalry) }
             };
+
+            _coloredFormationBanners = new Dictionary<int, Banner>();
         }
 
         public override void OnCreated()
@@ -127,10 +130,11 @@ namespace BearMyBanner
             {
                 agent.RemoveFromEquipment(_forbiddenWeapons);
                 agent.AddComponent(new DropBannerComponent(agent, _settings, _dropBannerController));
-
-                if (_formationBanners.ContainsKey(campaignAgent.Formation) && _controller.AgentGetsFancyBanner(campaignAgent))
+                
+                if (_formationBanners.ContainsKey(campaignAgent.Formation) 
+                    && _controller.AgentGetsFancyBanner(campaignAgent))
                 {
-                    agent.EquipBanner(_formationBanners[campaignAgent.Formation]);
+                    agent.EquipBanner(EvaluateColoredFormationBanner(agent, campaignAgent));
                 }
                 else
                 {
@@ -162,6 +166,34 @@ namespace BearMyBanner
             {
                 Main.LogError(ex);
             }
+        }
+
+        private Banner EvaluateColoredFormationBanner(Agent agent, CampaignAgent campaignAgent)
+        {
+            uint mainColor = agent.Origin.Banner.GetPrimaryColor();
+            uint iconColor = agent.Origin.Banner.GetFirstIconColor();
+            int bannerHash = GetFormationBannerHash(campaignAgent.Formation, mainColor, iconColor);
+
+            Banner coloredFormationBanner = _formationBanners[campaignAgent.Formation];
+            if (!_coloredFormationBanners.ContainsKey(bannerHash))
+            {
+                coloredFormationBanner = BannerExtension.ReplacePlaceholderBannerColors(new Banner(coloredFormationBanner),
+                    mainColor, iconColor);
+                _coloredFormationBanners.Add(bannerHash, coloredFormationBanner);
+            }
+            else
+            {
+                coloredFormationBanner = _coloredFormationBanners[bannerHash];
+            }
+
+            return coloredFormationBanner;
+        }
+
+        private int GetFormationBannerHash(FormationGroup formation, uint mainColor, uint iconColor)
+        {
+            int multiplier = 37;
+            int hashCode = formation.GetHashCode() * multiplier + mainColor.GetHashCode();
+            return multiplier * hashCode + iconColor.GetHashCode();
         }
     }
 }

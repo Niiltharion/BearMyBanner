@@ -5,6 +5,9 @@ namespace BearMyBanner
 {
     public static class BannerExtension
     {
+        public const int mainColorPlaceholderId = 40;
+        public const int iconColorPlaceholderId = 116;
+        
         public static void ChangeBanner(this Banner banner, IBMBBanner newBanner)
         {
             banner.Deserialize(newBanner.Key);
@@ -29,6 +32,40 @@ namespace BearMyBanner
             for (int i = 1; i < banner.BannerDataList.Count; i++)
             {
                 banner.BannerDataList[i].MeshId = meshId;
+            }
+        }
+        
+        public static Banner ReplacePlaceholderBannerColors(this Banner banner, uint mainColor, uint iconColor)
+        {
+            int mainColorId = BannerManager.GetColorId(mainColor);
+            int iconColorId = BannerManager.GetColorId(iconColor);
+            
+            if (mainColorId < 0 || iconColorId < 0)
+            {
+                return banner;
+            }
+            
+            for (int index = 0; index < banner.BannerDataList.Count; ++index)
+            {
+                banner.BannerDataList[index].ColorId = 
+                    EvaluatePlaceholderReplacementColor(banner.BannerDataList[index].ColorId, mainColorId, iconColorId);
+                banner.BannerDataList[index].ColorId2 = 
+                    EvaluatePlaceholderReplacementColor(banner.BannerDataList[index].ColorId2, mainColorId, iconColorId);;
+            }
+
+            return banner;
+        }
+
+        private static int EvaluatePlaceholderReplacementColor(int inputColor, int mainColorId, int iconColorId)
+        {
+            switch (inputColor)
+            {
+                case mainColorPlaceholderId:
+                    return mainColorId;
+                case iconColorPlaceholderId:
+                    return iconColorId;
+                default:
+                    return inputColor;
             }
         }
     }
