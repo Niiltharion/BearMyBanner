@@ -116,7 +116,7 @@ namespace BearMyBanner
             //int processedTroops = _settings.UnitCountMode == UnitCountMode.Type ? _processedByType[agentParty][agentSpec].Count : _processedByTroop[agentParty][agentCharacter].Count;
             int processedTroops = GetProcessedTroopsByMode(agentParty, agentSpec, agentFormation, agentCharacter);
 
-            if (agentCharacter.IsHero || processedTroops % _settings.BearerToTroopRatio == 0)
+            if (agentCharacter.IsHero || processedTroops % (2 * _settings.BearerToTroopRatio) <= 1 )
             {
                 CountBannerGivenToParty(agentParty);
                 return true;
