@@ -16,11 +16,11 @@
 	</DependedModules>
 	<!-- Prototype -->
 	<DependedModuleMetadatas>
-		<DependedModuleMetadata id="Native" order="LoadBeforeThis" version="e1.5.3.*" />
-		<DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="e1.5.3.*" />
-		<DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="e1.5.3.*" />
-		<DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" version="e1.5.3.*" optional="true" />
-		<DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" version="e1.5.3.*" optional="true" />
+		<DependedModuleMetadata id="Native" order="LoadBeforeThis" version="e1.5.7.*" />
+		<DependedModuleMetadata id="SandBoxCore" order="LoadBeforeThis" version="e1.5.7.*" />
+		<DependedModuleMetadata id="Sandbox" order="LoadBeforeThis" version="e1.5.7.*" />
+		<DependedModuleMetadata id="StoryMode" order="LoadBeforeThis" version="e1.5.7.*" optional="true" />
+		<DependedModuleMetadata id="CustomBattle" order="LoadBeforeThis" version="e1.5.7.*" optional="true" />
 
 		<DependedModuleMetadata id="Bannerlord.MBOptionScreen.MCMv3" order="LoadBeforeThis" version="v4.0.7" />
 	</DependedModuleMetadatas>
